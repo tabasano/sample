@@ -5,3 +5,4 @@ edit 2
 edit 3
 てす
 ssh connect 修正
+sshにするところではまる
