@@ -6,3 +6,4 @@ edit 3
 てす
 ssh connect 修正
 sshにするところではまる
+tes
