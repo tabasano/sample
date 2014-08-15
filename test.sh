@@ -1,2 +1,2 @@
 #!/bin/bash
-ruby hello.rb
+ruby attr_accessor-tes.rb

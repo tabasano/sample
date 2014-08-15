@@ -2,12 +2,13 @@ language: ruby
 rvm:
   - 1.8
   - 1.9
-  - 2.0.0
-  - 2.1.2
+  - 2.0
+  - 2.1
 # bundler_args: --jobs=2
 
 before_script:
  - chmod +x test.sh
+ - ruby -v
 script: ./test.sh
 branches:
   only:
