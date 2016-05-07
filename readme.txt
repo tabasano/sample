@@ -22,7 +22,7 @@ commit
 >> git commit --amend
   AuthorDate: Sat May 7 13:11:09 2016 +0900(変更なし)
   CommitDate: Sat May 7 13:00:35 2016 +0900(env)
->> git commit --amend --date="%GIT_AUTHO_DATRE%"
+>> git commit --amend --date="%GIT_AUTHOR_DATE%"
   AuthorDate: Sat May 7 13:00:35 2016 +0900(--date)
   CommitDate: Sat May 7 13:00:35 2016 +0900(env)
 
