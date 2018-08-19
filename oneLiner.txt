@@ -1,0 +1,2 @@
+# grep-cp
+=ls|xargs -n1 grep -l -i keyword --| awk '{print "cp -p \"" $0 "\" destdir"}'|sed e
