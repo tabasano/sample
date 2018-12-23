@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+hello!
+</title>
+<script type="text/javascript">
+<!--
+function btn_onclick(){
+  window.alert('ボタンがクリックされたyo');
+}
+function drg_tes(){
+  window.alert('ドラッグ＆ドロップ');
+  return false;
+}
+
+//-->
+</script>
+</head>
+<body>
+<form method="post" action="file.php" enctype="multipart/form-data">
+file!:
+<input type="file" name="upfile" size="30" />
+<br />
+<br />
+file2!:
+<input type="file" name="upfile2" size="30" />
+<br />
+<br />
+<input type="submit" value="アップロード" />
+</form>
+<input type="button" value="ダイアログ" onclick="btn_onclick()" />
+<div ondrop="alert('drop')">
+test....!
+</div>
+</body>
+</html>
+
