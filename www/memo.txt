@@ -1,0 +1,46 @@
+$ mysql -u root -p
+
+mysql> CREATE USER newname@localhost IDENTIFIED BY 'password';
+mysql> GRANT ALL ON databasse_name.* TO newname@localhost; 
+mysql> QUIT
+
+$ mysql -u newname -p
+
+mysql> 
+
+----------------------
+  show databases;
+  use dbname
+  select database();
+  create table tbl(name varchar(10), age int, weight int);
+  # shift_JIS
+  charset=cp932;
+  show tables;
+  # other db
+  select * from db.tbl;
+  desc tbl;
+  insert into tbl (a,b,c) values("a","aa","aaa");
+  # multi
+  insert into tbl (a,b,c) values("a","aa","aaa"), ("b","b2","b3");
+  # modify type
+  alter table tbl modify name varchar(100);
+  # add
+  alter table tbl add newitem varchar(10);
+  alter table tbl add newitem varchar(10) first;
+  alter table tbl add newitem varchar(10) after name;
+  alter table tbl change name namae varchar(200);
+  alter table tbl drop name;
+  # primary key
+  create table tbl(id int primary key, age int, weight int);
+  # auto_increment
+  create table tbl(id int auto_increment primary key, age int, weight int);
+  # default
+  alter table tbl modify name varchar(100) default 'noname';
+  # copy table (with empty data)
+  create table newtbl like tbl;
+  # copy data
+  insert into newtbl select * from tbl;
+  insert into newtbl (newname) select name from tbl;
+  drop table tbl;
+  drop database db;
+  delete from tbl;
