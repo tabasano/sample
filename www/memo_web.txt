@@ -1,2 +1,6 @@
 $ php -S (ip):(port)
 $ python -m SimpleHTTPServer (port)
+
+>chrome app
+web server for chrome
+  >chrome://apps > start
