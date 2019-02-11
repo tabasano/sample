@@ -1,0 +1,26 @@
+#####  Color Palette by Paletton.com
+
+
+*** Primary color: green
+
+   shade 0 = #5FAB8A
+   shade 1 = #D6EBE2
+   shade 2 = #88E5BD
+   shade 3 = #50DA9F
+   shade 4 = #1BBE78
+
+*** Secondary color (1): blue
+
+   shade 0 = #6676A8
+   shade 1 = #D7DCEA
+   shade 2 = #92A7E4
+   shade 3 = #5F7ED9
+   shade 4 = #2D51BC
+
+*** Secondary color (2): yellow
+
+   shade 0 = #CBEA82
+   shade 1 = #F4FBE5
+   shade 2 = #DCFA95
+   shade 3 = #C9F85B
+   shade 4 = #B4F323
