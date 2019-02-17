@@ -1,0 +1,4 @@
+MFCでOS標準のメニューバーを使う
+http://p4ken.hatenablog.jp/entry/2017/04/13/012219
+
+
