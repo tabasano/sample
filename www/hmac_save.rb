@@ -113,4 +113,5 @@ pass=gets.chomp
 
 
 db=SqlLogin.new('logindb.db')
+p db.countall
 db.add(user,pass)
