@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Canvas</title>
+  </head>
+  <body onload="draw();">
+    <div id='hint'></div>
+    <canvas id="box" width="1800" height="1600"></canvas>
+    <script type="text/javascript">
+        var myt=0;
+        var grid=2.1;
+        //var tisecAr=[2000,2000,2000,100,100,100,100,100,100,100,200,200];
+        var tisecAr=[100];
+        var center={x:600,y:450};
+        function angy_(x,y,z,a)
+        {
+            r=(x**2+y**2+z**2)**0.5;
+            asin=Math.asin(x/r);
+            arc=asin+a.y;
+            zt=r*Math.sin(arc);
+            xt=r*Math.cos(arc);
+            return {x:xt,y:y,z:zt};
+        }
+        function angx_(x,y,z,a)
+        {
+            r=(x**2+y**2+z**2)**0.5;
+            asin=Math.asin(y/r);
+            arc=asin+a.x;
+            yt=r*Math.sin(arc);
+            zt=r*Math.cos(arc);
+            return {x:x,y:yt,z:zt};
+        }
+        function angMain(x,y,z,a)
+        {
+            r=(x**2+y**2)**0.5;
+            asin=Math.asin(y/r);
+            arc=asin+a;
+            xt=r*Math.sin(arc);
+            yt=r*Math.cos(arc);
+            return {x:xt,y:yt,z:z};
+        }
+        function angz(x,y,z,a)
+        {
+            var p=angMain(x,y,z,a.z);
+            return p;
+        }
+        function angx(x,y,z,a)
+        {
+            var p=angMain(z,x,y,a.y);
+            return {x:p.z,y:p.y,z:p.x};
+        }
+        function angy(x,y,z,a)
+        {
+            var p=angMain(y,z,x,a.y);
+            return {x:p.z,y:p.x,z:p.y};
+        }
+        function point23d_org(ctx,center,pos,mode)
+        {
+                ctx.beginPath();
+                var p={x:pos[0].x-center.x,y:pos[0].y-center.y};
+                ctx.moveTo(p.x+center.x,p.y+center.y);
+                for (var i=1;i<pos.length;i++){
+                    p={x:pos[i].x-center.x,y:pos[i].y-center.y};
+                    ctx.lineTo(p.x+center.x,p.y+center.y);
+                }
+                ctx.closePath();
+                mode=='stroke' ? ctx.stroke() : ctx.fill();
+        }
+        function calcpos(pos,angle)
+        {
+            var p;
+            p=pos;
+            p=angz(p.x,p.y,p.z,angle);
+            p=angx(p.x,p.y,p.z,angle);
+            //p=angy(p.x,p.y,p.z,angle);
+           return p; 
+        }
+        function point23d_all(ctx,center,pos,angle,mode)
+        {
+                center0={x:0,y:0,z:0};
+                ctx.beginPath();
+                var p=calcpos(pos[0],angle);
+                ctx.moveTo(p.x+center.x,p.y+center.y);
+                for (var i=1;i<pos.length;i++){
+                    p=calcpos(pos[i],angle);
+                    ctx.lineTo(p.x+center.x,p.y+center.y);
+                }
+                ctx.closePath();
+                mode=='stroke' ? ctx.stroke() : ctx.fill();
+                ctx.beginPath();
+                ctx.closePath();
+                ctx.stroke() ;
+        }
+        function point23d_z(ctx,center,pos,angle)
+        {
+                center0={x:0,y:0};
+                ctx.beginPath();
+                var p=ang(pos[0].x-center0.x,pos[0].y-center0.y,angle);
+                ctx.moveTo(p.x+center.x,p.y+center.y);
+                for (var i=1;i<pos.length;i++){
+                    p=ang(pos[i].x-center0.x,pos[i].y-center0.y,angle);
+                    ctx.lineTo(p.x+center.x,p.y+center.y);
+                }
+                ctx.closePath();
+                ctx.stroke();
+        }
+        function point23d_y(ctx,center,pos,angle)
+        {
+                center0={x:0,y:0};
+                ctx.beginPath();
+                var p={x:Math.sin(angle)*pos[0].x-center0.x,y:Math.cos(angle)*pos[0].y-center0.y};
+                ctx.moveTo(p.x+center.x,p.y+center.y);
+                for (var i=1;i<pos.length;i++){
+                    p={x:Math.sin(angle)*pos[i].x-center0.x,y:Math.cos(angle)*pos[i].y-center0.y};
+                    ctx.lineTo(p.x+center.x,p.y+center.y);
+                }
+                ctx.closePath();
+                ctx.stroke();
+        }
+        function point23d(ctx,center,pos,angle,mode)
+        {
+          point23d_all(ctx,center,pos,angle,mode);
+        }
+        function point23d_y2(ctx,center,pos,angle)
+        {
+                center0={x:0,y:0};
+                ctx.beginPath();
+                var p={x:Math.sin(angle)*pos[0].x-center0.x,y:pos[0].y-center0.y};
+                ctx.moveTo(p.x+center.x,p.y+center.y);
+                for (var i=1;i<pos.length;i++){
+                    p={x:Math.sin(angle)*pos[i].x-center0.x,y:pos[i].y-center0.y};
+                    ctx.lineTo(p.x+center.x,p.y+center.y);
+                }
+                ctx.closePath();
+                ctx.stroke();
+        }
+        function draw(){
+            //center.y+=Math.random()*5;
+            //center.x+=Math.random()*5;
+            var mode;
+            var angle={x:myt/Math.PI/grid,y:myt/Math.PI/grid/2.1,z:myt/Math.PI/grid/3.2};
+            var canvas = document.getElementById('box');
+            if (canvas.getContext){
+                var ctx = canvas.getContext('2d');
+                ctx.clearRect(0,0,1800,1600);
+                var pos;
+ 
+                for (var dx=0;dx<40;dx+=10) {
+                //塗りつぶし
+                  mode='fill';
+                  pos=[];
+                  pos.push({x:50,y:70,z:dx});
+                  pos.push({x:300,y:300,z:dx});
+                  pos.push({x:150,y:200,z:dx});
+                  point23d(ctx,center,pos,angle,mode);
+                  point23d_org(ctx,center,pos,mode);
+                }
+                for (var dx=0;dx<100;dx+=10) {
+                //輪郭線
+                  mode='stroke';
+                  pos=[];
+                  pos.push({x:30,y:180,z:dx});
+                  pos.push({x:160,y:20,z:dx});
+                  pos.push({x:320,y:90,z:dx});
+                  point23d(ctx,center,pos,angle,mode);
+                  point23d_org(ctx,center,pos,mode);
+                  pos=[];
+                  pos.push({x:30,y:30,z:dx});
+                  pos.push({x:350,y:30,z:dx});
+                  pos.push({x:350,y:350,z:dx});
+                  pos.push({x:350,y:350,z:100+dx});
+                  pos.push({x:300,y:350,z:dx});
+                  pos.push({x:30,y:350,z:dx});
+                  pos.push({x:30,y:30,z:dx});
+                  point23d(ctx,center,pos,angle,mode);
+                  point23d_org(ctx,center,pos,mode);
+                  pos=[]
+                  pos.push({x:60,y:60,z:0});
+                  pos.push({x:250,y:60,z:0});
+                  pos.push({x:250,y:250,z:0});
+                  pos.push({x:60,y:250,z:0});
+                  pos.push({x:60,y:60,z:0});
+                  point23d(ctx,center,pos,angle,mode);
+                  point23d_org(ctx,center,pos,mode);
+                }
+                for (var dx=0;dx<500;dx+=5) {
+                  pos=[]
+                  pos.push({x:60,y:60,z:dx});
+                  pos.push({x:100,y:60,z:dx+1});
+                  pos.push({x:100,y:100,z:dx+2});
+                  pos.push({x:60,y:100,z:dx+3});
+                  pos.push({x:60,y:60,z:dx+4});
+                  point23d(ctx,center,pos,angle,mode);
+                  point23d_org(ctx,center,pos,mode);
+                  pos=[]
+                  pos.push({x:300-60,y:300-60,z:dx});
+                  pos.push({x:300-100,y:300-60,z:dx+1});
+                  pos.push({x:300-100,y:300-100,z:dx+2});
+                  pos.push({x:300-60,y:300-100,z:dx+3});
+                  pos.push({x:300-60,y:300-60,z:dx+4});
+                  point23d(ctx,center,pos,angle,mode);
+                  point23d_org(ctx,center,pos,mode);
+                  pos=[]
+                  pos.push({x:300-60,y:60,z:dx});
+                  pos.push({x:300-100,y:60,z:dx+1});
+                  pos.push({x:300-100,y:100,z:dx+2});
+                  pos.push({x:300-60,y:100,z:dx+3});
+                  pos.push({x:300-60,y:60,z:dx+4});
+                  point23d(ctx,center,pos,angle,mode);
+                  point23d_org(ctx,center,pos,mode);
+                }
+                for (var dx=0;dx<200;dx+=5) {
+                  pos=[]
+                  pos.push({x:250,y:60,z:dx});
+                  pos.push({x:190,y:60,z:dx+1});
+                  pos.push({x:190,y:190,z:dx+2});
+                  pos.push({x:60,y:190,z:dx+3});
+                  pos.push({x:60,y:60,z:dx+4});
+                  point23d(ctx,center,pos,angle,mode);
+                  point23d_org(ctx,center,pos,mode);
+               }
+               var ccenter={x:300,y:300,z:300};
+               var cr=100;
+               var z;
+               var plus=[];
+               var minus=[];
+               pos=[];
+               for (var x=200;x<400;x+=5)
+               {
+                 for (var y=150;y<400;y+=5)
+                 {
+                   tmp=(cr**2-(x-ccenter.x)**2-(y-ccenter.y)**2);
+                   if(tmp<0) continue;
+                   z=tmp**0.5+ccenter.z;
+                   plus.push({x:x,y:y,z:z});
+                   z=-(tmp**0.5)+ccenter.z;
+                   minus.push({x:x,y:y,z:z});
+                 }
+                 pos=plus+minus;
+                 point23d(ctx,center,plus,angle,mode);
+                 point23d(ctx,center,minus,angle,mode);
+                 pos=[];
+                 plus=[];
+                 minus=[];
+               }
+            }
+            myt++;
+            document.getElementById('hint').innerText='.'+myt+' ('+carc(angle.x)+','+carc(angle.y)+','+carc(angle.z)+')';
+            setTimeout(draw,tisecAr[myt%tisecAr.length]);
+        }
+        function carc(rad)
+        {
+            return Math.floor(rad/Math.PI*360%360);
+        }
+// cf. https://www.genius-web.co.jp/blog/cat-121/canvas01
+    </script>
+    <style type="text/css">
+        #box {
+            background: #ffd;
+        }
+    </style>
+  </body>
+</html>
