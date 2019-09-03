@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Canvas</title>
+  </head>
+  <body onload="draw();setmy();">
+    <textarea id='my' onchange='setmy()'>
+100,200,360
+110,210,360
+120,220,369
+----
+300,300,5
+350,450,5
+50,300,51
+300,300,151
+350,450,15
+50,300,15
+300,300,25
+350,450,25
+50,300,25
+    </textarea>
+    <div id='hint'></div>
+    <canvas id="box" width="1800" height="1600"></canvas>
+    <script type="text/javascript">
+        var myt=0;
+        var grid=2.1;
+        var tisecAr=[100];
+        var center={x:600,y:450};
+        var bx=[];
+        function setmy()
+        {
+          var v=document.getElementById('my');
+          var lines=v.value.split(/-+/);
+          var one;
+          bx=[];
+          var tmp=[];
+          for(y=0;y<lines.length;y++) {
+            one=lines[y].split(/[,\n ]+/);
+            for (var i=0;i<one.length-3;i+=3) {
+              tmp.push({x:one[i],y:one[i+1],z:one[i+2]});
+            }
+            bx.push(tmp);
+            tmp=[];
+          }
+        }
+        function angy_(x,y,z,a)
+        {
+            r=(x**2+y**2+z**2)**0.5;
+            asin=Math.asin(x/r);
+            arc=asin+a.y;
+            zt=r*Math.sin(arc);
+            xt=r*Math.cos(arc);
+            return {x:xt,y:y,z:zt};
+        }
+        function angx_(x,y,z,a)
+        {
+            r=(x**2+y**2+z**2)**0.5;
+            asin=Math.asin(y/r);
+            arc=asin+a.x;
+            yt=r*Math.sin(arc);
+            zt=r*Math.cos(arc);
+            return {x:x,y:yt,z:zt};
+        }
+        function angMain(x,y,z,a)
+        {
+            r=(x**2+y**2)**0.5;
+            asin=Math.asin(y/r);
+            arc=asin+a;
+            xt=r*Math.sin(arc);
+            yt=r*Math.cos(arc);
+            return {x:xt,y:yt,z:z};
+        }
+        function angz(x,y,z,a)
+        {
+            var p=angMain(x,y,z,a.z);
+            return p;
+        }
+        function angx(x,y,z,a)
+        {
+            var p=angMain(z,x,y,a.y);
+            return {x:p.z,y:p.y,z:p.x};
+        }
+        function angy(x,y,z,a)
+        {
+            var p=angMain(y,z,x,a.y);
+            return {x:p.z,y:p.x,z:p.y};
+        }
+        function point23d_org(ctx,center,pos,mode)
+        {
+                ctx.beginPath();
+                var p={x:pos[0].x-center.x,y:pos[0].y-center.y};
+                ctx.moveTo(p.x+center.x,p.y+center.y);
+                for (var i=1;i<pos.length;i++){
+                    p={x:pos[i].x-center.x,y:pos[i].y-center.y};
+                    ctx.lineTo(p.x+center.x,p.y+center.y);
+                }
+                ctx.closePath();
+                mode=='stroke' ? ctx.stroke() : ctx.fill();
+        }
+        function calcpos(pos,angle)
+        {
+            var p;
+            p=pos;
+            p=angz(p.x,p.y,p.z,angle);
+            p=angx(p.x,p.y,p.z,angle);
+            //p=angy(p.x,p.y,p.z,angle);
+           return p; 
+        }
+        function point23d_all(ctx,center,pos,angle,mode)
+        {
+                center0={x:0,y:0,z:0};
+                ctx.beginPath();
+                var p=calcpos(pos[0],angle);
+                ctx.moveTo(p.x+center.x,p.y+center.y);
+                for (var i=1;i<pos.length;i++){
+                    p=calcpos(pos[i],angle);
+                    ctx.lineTo(p.x+center.x,p.y+center.y);
+                }
+                ctx.closePath();
+                mode=='stroke' ? ctx.stroke() : ctx.fill();
+                ctx.beginPath();
+                ctx.closePath();
+                ctx.stroke() ;
+        }
+        function point23d(ctx,center,pos,angle,mode)
+        {
+          point23d_all(ctx,center,pos,angle,mode);
+        }
+        function draw(){
+            var mode;
+            var angle={x:myt/Math.PI/grid,y:myt/Math.PI/grid/2.1,z:myt/Math.PI/grid/3.2};
+            var canvas = document.getElementById('box');
+            if (canvas.getContext){
+                var ctx = canvas.getContext('2d');
+                ctx.clearRect(0,0,1800,1600);
+                var pos;
+                mode='stroke';
+ 
+               if (bx.length>0) {
+                 for(i=0;i<bx.length;i++){
+                   point23d(ctx,center,bx[i],angle,mode);
+                   point23d_org(ctx,center,bx[i],mode);
+                 }
+               }
+            }
+            myt++;
+            document.getElementById('hint').innerText='.'+myt+' ('+carc(angle.x)+','+carc(angle.y)+','+carc(angle.z)+')';
+            setTimeout(draw,tisecAr[myt%tisecAr.length]);
+        }
+        function carc(rad)
+        {
+            return Math.floor(rad/Math.PI*360%360);
+        }
+    </script>
+    <style type="text/css">
+        #box {
+            background: #ffd;
+        }
+    </style>
+  </body>
+</html>
