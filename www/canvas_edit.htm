@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=Shift_JIS">
     <title>Canvas</title>
   </head>
   <body onload="draw();setmy();">
-    <textarea id='my' onchange='setmy()'>
+    <textarea id="my" onchange="setmy()" style="width: 536px; height: 303px;">100,200,360
 100,200,360
 110,210,360
 120,220,369
@@ -19,7 +19,10 @@
 350,450,25
 50,300,25
     </textarea>
-    <div id='hint'></div>
+    <input type="button" onclick="reset()" value="reset"/>
+    <input type="button" onclick="rateup(1)" value="+"/>
+    <input type="button" onclick="rateup(-1)" value="-"/>
+    <div id="hint"></div>
     <canvas id="box" width="1800" height="1600"></canvas>
     <script type="text/javascript">
         var myt=0;
@@ -27,6 +30,20 @@
         var tisecAr=[100];
         var center={x:600,y:450};
         var bx=[];
+        var rate=1;
+        function rateup(up)
+        {
+          rate+=0.2*up;
+          setmy();
+        }
+        function reset()
+        {
+          bx=[];
+        }
+        function setposval(x)
+        {
+          return Number(x*rate);
+        }
         function setmy()
         {
           var v=document.getElementById('my');
@@ -37,7 +54,7 @@
           for(y=0;y<lines.length;y++) {
             one=lines[y].split(/[,\n ]+/);
             for (var i=0;i<one.length-3;i+=3) {
-              tmp.push({x:one[i],y:one[i+1],z:one[i+2]});
+              tmp.push({x:setposval(one[i]),y:setposval(one[i+1]),z:setposval(one[i+2])});
             }
             bx.push(tmp);
             tmp=[];
