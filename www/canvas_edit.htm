@@ -18,22 +18,64 @@
 300,300,25
 350,450,25
 50,300,25
-    </textarea>
-    <input type="button" onclick="reset()" value="reset"/>
-    <input type="button" onclick="rateup(1)" value="+"/>
-    <input type="button" onclick="rateup(-1)" value="-"/>
+</textarea>
+<input type="button" onclick="reset()" value="reset"/>
+<input type="button" onclick="rateup(1)" value="+"/>
+<input type="button" onclick="rateup(-1)" value="-"/>
+<input type="button" onclick="posup(-1)" value="up"/>
+<input type="button" onclick="posup(1)" value="down"/>
+<input type="button" onclick="posright(-1)" value="<-"/>
+<input type="button" onclick="posright(1)" value="->"/>
+<input type="button" onclick="setangleX(1)" value="x"/>
+<input type="button" onclick="setangleY(1)" value="y"/>
+<input type="button" onclick="setangleZ(1)" value="z"/>
+<input type="button" onclick="setangleX(-1)" value="-x"/>
+<input type="button" onclick="setangleY(-1)" value="-y"/>
+<input type="button" onclick="setangleZ(-1)" value="-z"/>
+      
     <div id="hint"></div>
     <canvas id="box" width="1800" height="1600"></canvas>
     <script type="text/javascript">
         var myt=0;
         var grid=2.1;
         var tisecAr=[100];
+        var interval = 100;
         var center={x:600,y:450};
         var bx=[];
         var rate=1;
+        var angle={x:myt/Math.PI/grid,y:myt/Math.PI/grid/2.1,z:myt/Math.PI/grid/3.2};
+        var moveunit=10;
+        var centershift={x:0,y:0};
+        function setangle(myt)
+        {
+            angle={x:myt/Math.PI/grid,y:myt/Math.PI/grid/2.1,z:myt/Math.PI/grid/3.2};
+        }
+        setangle(0);
+        function setangleX(v)
+        {
+            angle.x+=v/Math.PI/grid;
+        }
+        function setangleY(v)
+        {
+            angle.y+=v/Math.PI/grid/2.1;
+        }
+        function setangleZ(v)
+        {
+            angle.z+=v/Math.PI/grid/3.2;
+        }
         function rateup(up)
         {
           rate+=0.2*up;
+          setmy();
+        }
+        function posup(up)
+        {
+          centershift.y+=up*moveunit;
+          setmy();
+        }
+        function posright(up)
+        {
+          centershift.x+=up*moveunit;
           setmy();
         }
         function reset()
@@ -128,10 +170,10 @@
                 center0={x:0,y:0,z:0};
                 ctx.beginPath();
                 var p=calcpos(pos[0],angle);
-                ctx.moveTo(p.x+center.x,p.y+center.y);
+                ctx.moveTo(p.x+center.x+centershift.x, p.y+center.y+centershift.y);
                 for (var i=1;i<pos.length;i++){
                     p=calcpos(pos[i],angle);
-                    ctx.lineTo(p.x+center.x,p.y+center.y);
+                    ctx.lineTo(p.x+center.x+centershift.x, p.y+center.y+centershift.y);
                 }
                 ctx.closePath();
                 mode=='stroke' ? ctx.stroke() : ctx.fill();
@@ -145,7 +187,6 @@
         }
         function draw(){
             var mode;
-            var angle={x:myt/Math.PI/grid,y:myt/Math.PI/grid/2.1,z:myt/Math.PI/grid/3.2};
             var canvas = document.getElementById('box');
             if (canvas.getContext){
                 var ctx = canvas.getContext('2d');
@@ -160,9 +201,8 @@
                  }
                }
             }
-            myt++;
-            document.getElementById('hint').innerText='.'+myt+' ('+carc(angle.x)+','+carc(angle.y)+','+carc(angle.z)+')';
-            setTimeout(draw,tisecAr[myt%tisecAr.length]);
+            document.getElementById('hint').innerText='.'+myt+' ('+carc(angle.x)+','+carc(angle.y)+','+carc(angle.z)+')'+'['+centershift.x+','+centershift.y+']';
+            setTimeout(draw,interval);
         }
         function carc(rad)
         {
@@ -174,5 +214,5 @@
             background: #ffd;
         }
     </style>
-  </body>
+    </body>
 </html>
