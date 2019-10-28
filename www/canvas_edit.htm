@@ -18,21 +18,23 @@
 300,300,25
 350,450,25
 50,300,25
-</textarea>
-<input type="button" onclick="reset()" value="reset"/>
-<input type="button" onclick="rateup(1)" value="+"/>
-<input type="button" onclick="rateup(-1)" value="-"/>
-<input type="button" onclick="posup(-1)" value="up"/>
-<input type="button" onclick="posup(1)" value="down"/>
-<input type="button" onclick="posright(-1)" value="<-"/>
-<input type="button" onclick="posright(1)" value="->"/>
-<input type="button" onclick="setangleX(1)" value="x"/>
-<input type="button" onclick="setangleY(1)" value="y"/>
-<input type="button" onclick="setangleZ(1)" value="z"/>
-<input type="button" onclick="setangleX(-1)" value="-x"/>
-<input type="button" onclick="setangleY(-1)" value="-y"/>
-<input type="button" onclick="setangleZ(-1)" value="-z"/>
-      
+    </textarea>
+    <input type="button" onclick="reset()" value="reset"/>
+    <input type="text" onchange="setrate(this)" value="1"/>
+    <input type="button" onclick="rateup(1)" value="+"/>
+    <input type="button" onclick="rateup(-1)" value="-"/>
+    <input type="button" onclick="posup(-1)" value="up"/>
+    <input type="button" onclick="posup(1)" value="down"/>
+    <input type="button" onclick="posright(-1)" value="<-"/>
+    <input type="button" onclick="posright(1)" value="->"/>
+    <input type="button" onclick="setangleX(1)" value="x"/>
+    <input type="button" onclick="setangleY(1)" value="y"/>
+    <input type="button" onclick="setangleZ(1)" value="z"/>
+    <input type="button" onclick="setangleX(-1)" value="-x"/>
+    <input type="button" onclick="setangleY(-1)" value="-y"/>
+    <input type="button" onclick="setangleZ(-1)" value="-z"/>
+    <input type="text" onchange="setmvrate(this)" value="1"/>
+
     <div id="hint"></div>
     <canvas id="box" width="1800" height="1600"></canvas>
     <script type="text/javascript">
@@ -43,6 +45,7 @@
         var center={x:600,y:450};
         var bx=[];
         var rate=1;
+        var mvrate=1;
         var angle={x:myt/Math.PI/grid,y:myt/Math.PI/grid/2.1,z:myt/Math.PI/grid/3.2};
         var moveunit=10;
         var centershift={x:0,y:0};
@@ -53,20 +56,30 @@
         setangle(0);
         function setangleX(v)
         {
-            angle.x+=v/Math.PI/grid;
+            angle.x+=v/Math.PI/grid*mvrate;
         }
         function setangleY(v)
         {
-            angle.y+=v/Math.PI/grid/2.1;
+            angle.y+=v/Math.PI/grid/2.1*mvrate;
         }
         function setangleZ(v)
         {
-            angle.z+=v/Math.PI/grid/3.2;
+            angle.z+=v/Math.PI/grid/3.2*mvrate;
         }
         function rateup(up)
         {
           rate+=0.2*up;
           setmy();
+        }
+        function setrate(t)
+        {
+            rate=Number(t.value);
+            setmy();
+        }
+        function setmvrate(t)
+        {
+            mvrate=Number(t.value);
+            setmy();
         }
         function posup(up)
         {
@@ -160,6 +173,7 @@
         {
             var p;
             p=pos;
+            //console.log(p);
             p=angz(p.x,p.y,p.z,angle);
             p=angx(p.x,p.y,p.z,angle);
             //p=angy(p.x,p.y,p.z,angle);
